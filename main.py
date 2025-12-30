@@ -4,6 +4,7 @@ from firebase_db import get_db
 from admin import router as admin_router
 
 app = FastAPI(title="DakshaTrade Backend")
+app.include_router(admin_router)
 
 db = get_db()
 
