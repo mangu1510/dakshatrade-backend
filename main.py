@@ -3,8 +3,10 @@ import os
 import json
 import firebase_admin
 from firebase_admin import credentials, firestore
+from admin import router as admin_router
 
 app = FastAPI(title="DakshaTrade Backend")
+app.include_router(admin_router)
 
 # ---------------- FIREBASE INIT ----------------
 firebase_key = os.environ.get("FIREBASE_KEY")
