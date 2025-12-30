@@ -1,29 +1,16 @@
 from fastapi import FastAPI, Request, HTTPException
 import os
-import json
-import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_db import get_db
 from admin import router as admin_router
 
 app = FastAPI(title="DakshaTrade Backend")
-app.include_router(admin_router)
 
-# ---------------- FIREBASE INIT ----------------
-firebase_key = os.environ.get("FIREBASE_KEY")
+db = get_db()
 
-if not firebase_key:
-    raise RuntimeError("Firebase key not found")
-
-cred = credentials.Certificate(json.loads(firebase_key))
-firebase_admin.initialize_app(cred)
-db = firestore.client()
-
-# ---------------- HEALTH CHECK ----------------
 @app.get("/")
 def health():
     return {"status": "DakshaTrade backend running"}
 
-# ---------------- TRADINGVIEW WEBHOOK ----------------
 @app.post("/webhook")
 async def tradingview_webhook(request: Request):
     secret = request.headers.get("X-SECRET")
